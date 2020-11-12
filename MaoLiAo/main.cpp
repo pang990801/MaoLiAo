@@ -18,7 +18,7 @@ int main()
 	initgraph(XSIZE, YSIZE);
 
 	HWND hwnd = GetHWnd();	//获取窗口句柄
-	SetWindowText(hwnd, "超级马里奥v1.0");
+	SetWindowText(hwnd, "猫里奥");
 
 	control myCtrl;        //定义一个游戏控制
 	myCtrl.gameStart();//游戏的开始界面
