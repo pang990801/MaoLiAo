@@ -9,14 +9,14 @@ control::control(void) //构造
 {
 	key = 0;
 	loadimage(&img_bg, "res\\home.bmp", XSIZE, 5 * YSIZE);
-}   
+}
 control::~control(void) //析构
-{}  
+{}
 
 int control::GetCommand() //键盘中转 返回key
 {
 	int c = 0;
-	
+
 	//由于接收的信号不知一个，所以需要异步输入
 	//异步输入函数：利用Windows API中的GetAsyncKeyState函数
 
@@ -45,7 +45,7 @@ void control::pauseClick()
 	setfillcolor(GREEN);
 	fillpolygon(points, 4); //绘制多边形
 	setbkmode(TRANSPARENT); //设置背景模式-透明
-	
+
 	//绘制Text
 	settextstyle(15, 0, "华纹琥珀");
 
@@ -66,7 +66,7 @@ void control::pauseClick()
 	RECT r4 = { XSIZE / 2 - 45,YSIZE / 3 + 60,XSIZE / 2 + 45,YSIZE / 3 + 90 };	//主菜单
 	rectangle(XSIZE / 2 - 45, YSIZE / 3 + 60, XSIZE / 2 + 45, YSIZE / 3 + 90);
 	drawtext("退出游戏", &r4, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-	
+
 	RECT r5 = { XSIZE / 2 - 45,YSIZE / 3 + 90,XSIZE / 2 + 45,YSIZE / 3 + 120 };	//主菜单
 	rectangle(XSIZE / 2 - 45, YSIZE / 3 + 90, XSIZE / 2 + 45, YSIZE / 3 + 120);
 	drawtext("进行存档", &r5, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
@@ -85,26 +85,26 @@ void control::pauseClick()
 		{
 		case WM_LBUTTONDOWN: //点击选中
 			EndBatchDraw();
-			if (m.x>XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 && m.y<YSIZE / 3 + 30)//如果选择“回到游戏”，则返回VIR_RETURN
+			if (m.x > XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 && m.y < YSIZE / 3 + 30)//如果选择“回到游戏”，则返回VIR_RETURN
 			{
 				key = VIR_RETURN;
 				return;
 			}
-			else if (m.x>XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 30 && m.y<YSIZE / 3 + 60)//如果选择“重新开始”，则返回VIR_RESTART
+			else if (m.x > XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 30 && m.y < YSIZE / 3 + 60)//如果选择“重新开始”，则返回VIR_RESTART
 			{
 				key = VIR_RESTART;
 				return;
 			}
-			else if (m.x>XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 60 && m.y<YSIZE / 3 + 90)//如果选择“主菜单”，则返回VIR_HOME
+			else if (m.x > XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 60 && m.y < YSIZE / 3 + 90)//如果选择“主菜单”，则返回VIR_HOME
 			{
 				key = VIR_HOME;
 				return;
 			}
-			else if (m.x>XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 90 && m.y<YSIZE / 3 + 120)//如果选择“主菜单”，则返回VIR_HOME
+			else if (m.x > XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 90 && m.y < YSIZE / 3 + 120)//如果选择“主菜单”，则返回VIR_HOME
 			{
-				FILE *fp=NULL;
-				fopen_s(&fp ,"gameRecord.dat", "w");
-				fprintf_s(fp, "%d",world );
+				FILE* fp = NULL;
+				fopen_s(&fp, "gameRecord.dat", "w");
+				fprintf_s(fp, "%d", world);
 				fclose(fp);
 				key = VIR_RETURN;
 				return;
@@ -113,10 +113,10 @@ void control::pauseClick()
 		case WM_MOUSEMOVE: //移动高亮
 			RECT r;
 			int i;
-			for (i = 0; i<4; i++)	//相当于重新绘制一遍 用不同的颜色突出
+			for (i = 0; i < 4; i++)	//相当于重新绘制一遍 用不同的颜色突出
 			{
 				//当鼠标移动到该区域时
-				if (m.x>XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + i * 30 && m.y<YSIZE / 3 + 30 + i * 30)
+				if (m.x > XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + i * 30 && m.y < YSIZE / 3 + 30 + i * 30)
 				{
 					r.left = XSIZE / 2 - 45;
 					r.top = YSIZE / 3 + i * 30;
@@ -184,7 +184,7 @@ int control::getKey() //获取键盘
 	{
 		key = GetCommand();
 	}
-	if (key&CMD_ESC) //当按Esc键时弹出暂停菜单
+	if (key & CMD_ESC) //当按Esc键时弹出暂停菜单
 	{
 		pauseClick();
 	}
@@ -217,7 +217,7 @@ void control::gameStart() //进入时的开始界面
 	drawtext("退出", &r5, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	drawtext("读档", &r6, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
-	bool _HOME = true, _INTRODUCTION = false, _OPERATION = false,_READ=false; //true表示处于当前页面 UI界面三个
+	bool _HOME = true, _INTRODUCTION = false, _OPERATION = false, _READ = false; //true表示处于当前页面 UI界面三个
 
 	MOUSEMSG m;
 	while (_HOME) //当在界面1时的UI交互
@@ -228,12 +228,12 @@ void control::gameStart() //进入时的开始界面
 		{
 		case WM_LBUTTONDOWN: //点击选择
 			EndBatchDraw();
-			if (m.x>XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 && m.y<YSIZE / 3 + 30 && _HOME == 1 && _INTRODUCTION == 0 && _OPERATION == 0)//如果选择“开始游戏”
+			if (m.x > XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 && m.y < YSIZE / 3 + 30 && _HOME == 1 && _INTRODUCTION == 0 && _OPERATION == 0)//如果选择“开始游戏”
 			{
 				_HOME = false;
 				break;
 			}
-			else if (m.x>XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 30 && m.y<YSIZE / 3 + 60 && _HOME == 1 && _OPERATION == 0)//如果选择“游戏介绍”
+			else if (m.x > XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 30 && m.y < YSIZE / 3 + 60 && _HOME == 1 && _OPERATION == 0)//如果选择“游戏介绍”
 			{
 				_INTRODUCTION = true;	//界面2的绘制
 				cleardevice();
@@ -246,7 +246,7 @@ void control::gameStart() //进入时的开始界面
 				drawtext("返回", &R1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 				break;
 			}
-			else if (m.x>XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 60 && m.y<YSIZE / 3 + 90 && _HOME == 1 && _INTRODUCTION == 0)//如果选择“操作说明”
+			else if (m.x > XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 60 && m.y < YSIZE / 3 + 90 && _HOME == 1 && _INTRODUCTION == 0)//如果选择“操作说明”
 			{
 				_OPERATION = true;	//界面3的绘制
 				cleardevice();
@@ -261,20 +261,20 @@ void control::gameStart() //进入时的开始界面
 				drawtext("返回", &R2, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 				break;
 			}
-			else if (m.x>XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 90 && m.y<YSIZE / 3 + 120 && _HOME == 1 && _INTRODUCTION == 0 && _OPERATION == 0)//如果选择“退出游戏”
+			else if (m.x > XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 90 && m.y < YSIZE / 3 + 120 && _HOME == 1 && _INTRODUCTION == 0 && _OPERATION == 0)//如果选择“退出游戏”
 				exit(0);
-			else if (m.x>XSIZE - 46 && m.x<XSIZE - 3 && m.y>YSIZE - 26 && m.y<YSIZE - 3 && (_INTRODUCTION == 1 || _OPERATION == 1))//如果选择“返回”
+			else if (m.x > XSIZE - 46 && m.x<XSIZE - 3 && m.y>YSIZE - 26 && m.y < YSIZE - 3 && (_INTRODUCTION == 1 || _OPERATION == 1))//如果选择“返回”
 			{
 				cleardevice();
 				_HOME = false, _INTRODUCTION = false, _OPERATION = false;
 				gameStart();
 			}
-			else if (m.x>XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 120 && m.y<YSIZE / 3 + 150 && _HOME == 1 && _INTRODUCTION == 0 && _OPERATION == 0) //如果选择"读取存档"
+			else if (m.x > XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + 120 && m.y < YSIZE / 3 + 150 && _HOME == 1 && _INTRODUCTION == 0 && _OPERATION == 0) //如果选择"读取存档"
 			{
 				//读档在此加入
-				FILE *fp;
+				FILE* fp;
 				int flag;
-				fopen_s(&fp, "gameRecord.dat","r");
+				fopen_s(&fp, "gameRecord.dat", "r");
 				fscanf_s(fp, "%d", &flag);
 				if (flag >= 4 || flag <= 0) {
 					printf("%d\n", MessageBox(GetForegroundWindow(), "提醒", "存档缺失，请检查存档", 1));
@@ -292,7 +292,7 @@ void control::gameStart() //进入时的开始界面
 			RECT r;
 			if (_INTRODUCTION == 1 || _OPERATION == 1)
 			{
-				if (m.x>XSIZE - 46 && m.x<XSIZE - 3 && m.y>YSIZE - 26 && m.y<YSIZE - 3)
+				if (m.x > XSIZE - 46 && m.x<XSIZE - 3 && m.y>YSIZE - 26 && m.y < YSIZE - 3)
 				{
 					r.left = XSIZE - 46;
 					r.top = YSIZE - 26;
@@ -322,9 +322,9 @@ void control::gameStart() //进入时的开始界面
 			}
 			else
 			{
-				for (int i = 0; i<5; i++)
+				for (int i = 0; i < 5; i++)
 				{
-					if (m.x>XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + i * 30 && m.y<YSIZE / 3 + 30 + i * 30)
+					if (m.x > XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 + i * 30 && m.y < YSIZE / 3 + 30 + i * 30)
 					{
 						r.left = XSIZE / 2 - 45;
 						r.top = YSIZE / 3 + i * 30;
@@ -412,7 +412,7 @@ void control::showLevel(int level) //显示关卡
 	char s1[20] = "关卡:  ";
 	char s2[2];
 	_itoa_s(level, s2, 10);	//同理
-	strcat_s(s1, s2);	
+	strcat_s(s1, s2);
 	setbkmode(TRANSPARENT);	//右边显示
 	outtextxy(XSIZE - 90, 10, s1);
 	setbkmode(OPAQUE);
@@ -423,12 +423,12 @@ void control::showDied(int life) //主角死亡时的动画 告诉生命值
 	cleardevice();
 	IMAGE img_hero;
 	loadimage(&img_hero, "res\\role.bmp");
-	putimage(XSIZE / 2 - 65, YSIZE / 2 - 30,  WIDTH,  HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
+	putimage(XSIZE / 2 - 65, YSIZE / 2 - 30, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
 	settextstyle(30, 0, "Gill Sans");
 	char s2[2];
 	_itoa_s(life, s2, 10);
 	outtextxy(XSIZE / 2 - 20, YSIZE / 2 - 30, 'X');
-	outtextxy(XSIZE / 2 + 20, YSIZE / 2 - 30,  s2);
+	outtextxy(XSIZE / 2 + 20, YSIZE / 2 - 30, s2);
 	Sleep(2000);
 }
 void control::showGameOver() //游戏结束时的动画
