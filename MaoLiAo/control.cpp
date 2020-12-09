@@ -193,26 +193,29 @@ int control::getKey() //获取键盘
 void control::gameStart() //进入时的开始界面
 {
 	cleardevice(); //清屏
+	setbkmode(TRANSPARENT); //设置背景模式-透明
 	putimage(0, 0, &img_bg);
 	settextstyle(40, 0, "Gill Sans");
 	RECT r1 = { 0, 0, XSIZE, YSIZE / 3 };
-	setbkmode(TRANSPARENT);
 	drawtext("猫里奥", &r1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
 	//主界面(同时也是界面1)
+	POINT points[8] = { { XSIZE / 2 - 45,YSIZE / 3 },{ XSIZE / 2 + 45,YSIZE / 3 },{ XSIZE / 2 + 45,YSIZE / 3 + 150 },{ XSIZE / 2 - 45,YSIZE / 3 + 150 } };
+	setfillcolor(0x666666);
+	fillpolygon(points, 4); //绘制多边形
+	setbkmode(TRANSPARENT); //设置背景模式-透明
 	settextstyle(20, 0, "黑体");
-	setbkmode(TRANSPARENT);
 	RECT r2 = { XSIZE / 2 - 45,YSIZE / 3,XSIZE / 2 + 45,YSIZE / 3 + 30 }; rectangle(XSIZE / 2 - 45, YSIZE / 3, XSIZE / 2 + 45, YSIZE / 3 + 30);
-	drawtext("开始", &r2, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	RECT r3 = { XSIZE / 2 - 45,YSIZE / 3 + 30,XSIZE / 2 + 45,YSIZE / 3 + 60 }; rectangle(XSIZE / 2 - 45, YSIZE / 3 + 30, XSIZE / 2 + 45, YSIZE / 3 + 60);
-	drawtext("介绍", &r3, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	RECT r4 = { XSIZE / 2 - 45,YSIZE / 3 + 60,XSIZE / 2 + 45,YSIZE / 3 + 90 }; rectangle(XSIZE / 2 - 45, YSIZE / 3 + 60, XSIZE / 2 + 45, YSIZE / 3 + 90);
-	drawtext("指导", &r4, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	RECT r5 = { XSIZE / 2 - 45,YSIZE / 3 + 90,XSIZE / 2 + 45,YSIZE / 3 + 120 }; rectangle(XSIZE / 2 - 45, YSIZE / 3 + 90, XSIZE / 2 + 45, YSIZE / 3 + 120);
-	drawtext("退出", &r5, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-
 	RECT r6 = { XSIZE / 2 - 45,YSIZE / 3 + 120,XSIZE / 2 + 45,YSIZE / 3 + 150 }; rectangle(XSIZE / 2 - 45, YSIZE / 3 + 120, XSIZE / 2 + 45, YSIZE / 3 + 150);
-	drawtext("//读档", &r6, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+	drawtext("开始", &r2, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	drawtext("介绍", &r3, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	drawtext("指导", &r4, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	drawtext("退出", &r5, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	drawtext("读档", &r6, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
 	bool _HOME = true, _INTRODUCTION = false, _OPERATION = false,_READ=false; //true表示处于当前页面 UI界面三个
 
@@ -360,10 +363,9 @@ void control::gameStart() //进入时的开始界面
 							r.right = XSIZE / 2 + 45;
 							r.bottom = YSIZE / 3 + 30 + i * 30;
 							POINT points[4] = { { r.left,r.top },{ r.right,r.top },{ r.right,r.bottom },{ r.left,r.bottom } };
-							setfillcolor(TRANSPARENT);
+							setfillcolor(0x666666);
 							fillpolygon(points, 4);
 							settextstyle(20, 0, "黑体");
-							setbkmode(TRANSPARENT);
 							switch (i)
 							{
 							case 0:
@@ -379,7 +381,7 @@ void control::gameStart() //进入时的开始界面
 								drawtext("退出", &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 								break;
 							case 4:
-								drawtext("//读档", &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+								drawtext("读档", &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 								break;
 							}
 						}
