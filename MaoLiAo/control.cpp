@@ -197,7 +197,7 @@ void control::gameStart() //进入时的开始界面
 	putimage(0, 0, &img_bg);
 	settextstyle(40, 0, "Gill Sans");
 	RECT r1 = { 0, 0, XSIZE, YSIZE / 3 };
-	drawtext("猫里奥", &r1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	//drawtext("猫里奥", &r1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
 	//主界面(同时也是界面1)
 	POINT points[8] = { { XSIZE / 2 - 45,YSIZE / 3 },{ XSIZE / 2 + 45,YSIZE / 3 },{ XSIZE / 2 + 45,YSIZE / 3 + 150 },{ XSIZE / 2 - 45,YSIZE / 3 + 150 } };
