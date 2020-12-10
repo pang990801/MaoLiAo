@@ -38,5 +38,9 @@
 #define VIR_RESTART 128
 #define VIR_HOME 256
 
+//一些计算的宏定义 方便计算
+#define max(a,b) ((a) > (b) ? (a) : (b))
+#define random(a,b) (rand()%(b-a)+a)
+
 #endif
 

@@ -78,7 +78,7 @@ private:
 	double bullet_iframe[BULLET_NUMBER];	//根据iframe就是选择精灵用第几张图来做主图
 	int score;
 private:
-	Map* touchMap(int x, int y, scene* myScene);//指针做参数后，效率明显提高
+	Map* touchMap(int x, int y, scene* myScene, int world);//指针做参数后，效率明显提高
 	POINT* touchCoins(int x, int y, scene* myScene);
 	POINT* touchFood(int x, int y, scene* myScene);
 	Enemy* touchEnemy(int x, int y, Enemy* emy);
@@ -94,6 +94,6 @@ public:
 	bool isPassed() { return myHero.passed; }
 	void createEnemy(int world);
 	void show();
-	void action(int KEY, scene* myScene);
+	void action(int KEY, scene* myScene, int world);
 	int getScore() { return score; }
 };

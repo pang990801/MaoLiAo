@@ -153,7 +153,7 @@ void role::bullteFlying(Bullet* p, scene* myScene)	//子弹	//改良：最大距离
 		return;
 	}
 	Enemy* emy = touchEnemy(p->x, p->y, myEnemy);
-	Map* map = touchMap(p->x, p->y, myScene);
+	Map* map = touchMap(p->x, p->y, myScene, 1);
 	if (emy != NULL || map != NULL || p->x > MAX_DISTANCE)//如果子弹打到敌人或者墙或者达到最大距离
 	{
 		if (emy != NULL)
@@ -206,7 +206,7 @@ bool role::isTouch(POINT* p1, POINT* p2)
 	return false;
 }
 
-Map* role::touchMap(int x, int y, scene* myScene)	//碰撞
+Map* role::touchMap(int x, int y, scene* myScene, int world)	//碰撞
 {
 	//总体思路是判断主角的四个顶点是否至少有一个在地图内，有，则判断为主角碰撞到地图
 	int xmap = (int)myHero.x0;	//图片坐标
@@ -229,7 +229,7 @@ Map* role::touchMap(int x, int y, scene* myScene)	//碰撞
 		m[0].x = myScene->getMap()[i].x * WIDTH;
 		m[0].y = myScene->getMap()[i].y * HEIGHT;
 
-		if (myScene->getMap()[i].id == 10)//id为10的地图要大些
+		if (myScene->getMap()[i].id == 10 || myScene->getMap()[i].id == 8)//id为8和10的地图是管道
 		{
 			m[1].x = myScene->getMap()[i].x * WIDTH + myScene->getMap()[i].xAmount * 2 * WIDTH;
 			m[1].y = myScene->getMap()[i].y * HEIGHT + myScene->getMap()[i].yAmount * 2 * HEIGHT;
@@ -240,7 +240,14 @@ Map* role::touchMap(int x, int y, scene* myScene)	//碰撞
 			m[1].y = myScene->getMap()[i].y * HEIGHT + myScene->getMap()[i].yAmount * HEIGHT;
 		}
 		if (isTouch(r, m))//如果两个矩形相交，则碰撞
+		{
+			if(world == 3)
+			{
+				myHero.died = true; //第三关碰到就死
+			}
 			return &(myScene->getMap()[i]);
+		}
+			
 		i++;
 	}
 	return NULL;
@@ -427,7 +434,7 @@ void role::show()	//可以封装更多函数为了方便
 	}
 }
 
-void role::action(int KEY, scene* myScene)
+void role::action(int KEY, scene* myScene, int world)
 {
 	this->myScene = myScene;
 	myHero.direction.x = 0;//=0表示主角不面向任意个方向
@@ -435,7 +442,7 @@ void role::action(int KEY, scene* myScene)
 	double a = 0;//主角运动的加速度和摩擦力给予的加速度
 	double a1 = 0;
 	Map* map = NULL;
-	if ((KEY & CMD_UP) && myHero.isFly == false && myHero.ending == false)//只有当主角没有在空中且主角没过关的时候允许按上升键
+	if ((KEY & CMD_UP) && myHero.isFly == false && myHero.ending == false || ((KEY & CMD_UP) && world == 3))//只有当主角没有在空中且主角没过关的时候允许按上升键
 	{
 		mciSendString("play music_jump from 0", NULL, 0, NULL);
 		myHero.isFly = true;//表示主角在空中
@@ -445,7 +452,7 @@ void role::action(int KEY, scene* myScene)
 	{
 		myHero.yy = myHero.yy - (-inertia::move(myHero.vY, TIME, G) * UNREAL_HEIGHT / REAL_HEIGHT);//move函数返回单位时间（T）内，主角上升或下降的高度
 		myHero.y = (int)myHero.yy;
-		map = touchMap(myHero.x, myHero.y + 1, myScene);
+		map = touchMap(myHero.x, myHero.y + 1, myScene, world);
 		if (map != NULL)
 		{
 			if (myHero.vY > 0)//表示当主角接触地面时
@@ -477,7 +484,7 @@ void role::action(int KEY, scene* myScene)
 	}
 	else
 	{
-		map = touchMap(myHero.x, myHero.y + 1, myScene);
+		map = touchMap(myHero.x, myHero.y + 1, myScene, world);
 		if (map == NULL)//如果主角没有碰到地图，及在空中
 		{
 			myHero.isFly = true;
@@ -526,7 +533,7 @@ void role::action(int KEY, scene* myScene)
 	}
 	if (myHero.x > XSIZE)	//已经过关
 		myHero.passed = true;
-	if (touchMap(myHero.x, myHero.y, myScene) != NULL)	//碰到边界
+	if (touchMap(myHero.x, myHero.y, myScene ,1) != NULL)	//碰到边界
 	{
 		if (myHero.x > XRIGHT)
 			myHero.x = XRIGHT;
@@ -601,7 +608,7 @@ void role::action(int KEY, scene* myScene)
 				int y1 = myEnemy[i].y;
 				int x2 = (int)myHero.x0 + myEnemy[i].x + myEnemy[i].turn * WIDTH;
 				int y2 = myEnemy[i].y + 1;
-				if (touchMap(x1, y1, myScene) != NULL || touchMap(x2, y2, myScene) == NULL)//如果敌人碰到墙壁或者没有踩在陆地上，则敌人向相反方向运动
+				if (touchMap(x1, y1, myScene, 1) != NULL || touchMap(x2, y2, myScene, 1) == NULL)//如果敌人碰到墙壁或者没有踩在陆地上，则敌人向相反方向运动
 					myEnemy[i].turn *= -1;
 			}
 			i++;

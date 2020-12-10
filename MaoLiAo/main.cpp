@@ -54,7 +54,7 @@ int main()
 			mciSendString("play music_bg from 0", NULL, 0, NULL);
 		}
 
-		myRole.action(key, &myScene);
+		myRole.action(key, &myScene ,world);
 
 		myScene.action(&myRole);
 
