@@ -421,15 +421,32 @@ void control::showDied(int life) //主角死亡时的动画 告诉生命值
 {
 	settextstyle(0, 0, "Goudy Stout");
 	cleardevice();
+	IMAGE img;
+	loadimage(&img, "res\\home.bmp", XSIZE, 5 * YSIZE);
 	IMAGE img_hero;
 	loadimage(&img_hero, "res\\role.bmp");
-	putimage(XSIZE / 2 - 65, YSIZE / 2 - 30, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
-	settextstyle(30, 0, "Gill Sans");
-	char s2[2];
-	_itoa_s(life, s2, 10);
-	outtextxy(XSIZE / 2 - 20, YSIZE / 2 - 30, 'X');
-	outtextxy(XSIZE / 2 + 20, YSIZE / 2 - 30, s2);
+	putimage(0, -2 * YSIZE, &img);
+	if (life == 1) {
+		putimage(XSIZE / 2 - 16, YSIZE / 2 - 16, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
+	}
+	if (life == 2) {
+		putimage(XSIZE / 2 - 37, YSIZE / 2 - 16, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
+		putimage(XSIZE / 2 + 5, YSIZE / 2 - 16, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
+	}
+	if (life == 3) {
+		putimage(XSIZE / 2 - 58, YSIZE / 2 - 16, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
+		putimage(XSIZE / 2 - 16, YSIZE / 2 - 16, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
+		putimage(XSIZE / 2 + 26, YSIZE / 2 - 16, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
+	}
+	if (life == 4) {
+		putimage(XSIZE / 2 - 79, YSIZE / 2 - 16, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
+		putimage(XSIZE / 2 - 37, YSIZE / 2 - 16, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
+		putimage(XSIZE / 2 + 5, YSIZE / 2 - 16, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
+		putimage(XSIZE / 2 + 47, YSIZE / 2 - 16, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
+	}
+
 	Sleep(2000);
+
 }
 void control::showGameOver() //游戏结束时的动画
 {
@@ -441,11 +458,14 @@ void control::showGameOver() //游戏结束时的动画
 void control::showPassed(int world) //通过某一关的画面
 {
 	cleardevice();
+	IMAGE img;
+	loadimage(&img, "res\\home.bmp", XSIZE, 5 * YSIZE);
+	putimage(0, -2 * YSIZE, &img);
 	char s1[20] = "LEVEL:  ";
 	char s2[2];
 	_itoa_s(world, s2, 10);
-	outtextxy(XSIZE / 2 - 20, YSIZE / 3, s1);
-	outtextxy(XSIZE / 2, YSIZE / 2 - 20, s2);
+	outtextxy(XSIZE / 2 - 20, YSIZE / 2 - 5, s1);
+	outtextxy(XSIZE / 2, YSIZE / 2 - 5, s2);
 	Sleep(2000);
 }
 void control::showPassedAll() //通关所有的动画

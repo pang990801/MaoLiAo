@@ -100,7 +100,7 @@ void role::createEnemy(int world)	//与scene中的createFood等一样
 	}
 	else if (world == 3)
 	{
-		Enemy emy[] = { { 25,3,-1 },{ 31,3,1 },{ 39,3,-1 },{ 50,3,-1 },{ 68,3,1 },{ 66,8,-1 },{ 86,8,1 } };
+		Enemy emy[] = { { 24,4,-1 },{ 34,6,1 },{ 37,3,-1 },{ 43,5,-1 },{ 63,7,1 },{ 67,8,-1 },{ 86,5,1 } };
 		int i = 0;
 		while (i <= sizeof(emy) / sizeof(emy[0]))
 		{
@@ -241,9 +241,9 @@ Map* role::touchMap(int x, int y, scene* myScene, int world)	//碰撞
 		}
 		if (isTouch(r, m))//如果两个矩形相交，则碰撞
 		{
-			if(world == 3)
+			if(world == 3 && myScene->getMap()[i].id != 2 && myHero.isShoot == false)
 			{
-				myHero.died = true; //第三关碰到就死
+				myHero.died = true; //第三关碰到就死,砖块2除外,吃了无敌金币（星星除外）
 			}
 			return &(myScene->getMap()[i]);
 		}
