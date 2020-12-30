@@ -89,7 +89,7 @@ void Control::pauseClick()
 	//设置字体
 	LOGFONT f;
 	gettextstyle(&f);						// 获取当前字体设置
-	f.lfHeight = 18;						// 设置字体高度为 15
+	f.lfHeight = 15;						// 设置字体高度为 15
 	_tcscpy_s(f.lfFaceName, _T("黑体"));		// 设置字体为“黑体”(高版本 VC 推荐使用 _tcscpy_s 函数)
 	f.lfQuality = 1000;		// 设置输出效果为抗锯齿  
 	settextstyle(&f);						// 设置字体样式
@@ -173,7 +173,7 @@ void Control::pauseClick()
 					setfillcolor(BLUE);
 					fillpolygon(points, 4);
 					setbkmode(TRANSPARENT);
-					settextstyle(18, 0, "黑体");
+					settextstyle(15, 0, "黑体");
 					switch (i)
 					{
 					case 0:
@@ -203,7 +203,7 @@ void Control::pauseClick()
 						setfillcolor(GREEN);
 						fillpolygon(points, 4);
 						setbkmode(TRANSPARENT);
-						settextstyle(18, 0, "黑体");
+						settextstyle(15, 0, "黑体");
 						switch (i)
 						{
 						case 0:
