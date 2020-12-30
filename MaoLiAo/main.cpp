@@ -37,7 +37,7 @@ int main()
 	mciSendString("open res\\游戏结束.mp3 alias music_end", NULL, 0, NULL);
 	mciSendString("play music_bg repeat", NULL, 0, NULL);
 
-	Timer mytimer;//精确延迟
+	Timer gameTimer;//精确延迟
 
 	while (true)
 	{
@@ -72,7 +72,7 @@ int main()
 			gameCtrl.showLevel(world);
 			EndBatchDraw();
 
-			mytimer.Sleep(3500);
+			gameTimer.Sleep(3500);
 			life--;
 			if (life == 0)
 			{
@@ -99,7 +99,7 @@ int main()
 			if (world == 3)//如果主角通关
 			{
 				mciSendString("play music_win from 0", NULL, 0, NULL);
-				mytimer.Sleep(6500);
+				gameTimer.Sleep(6500);
 				mciSendString("play music_passedAll from 0", NULL, 0, NULL);
 				gameCtrl.showPassedAll();
 				life = LIFE;
@@ -112,7 +112,7 @@ int main()
 			else
 			{
 				mciSendString("play music_win from 0", NULL, 0, NULL);
-				mytimer.Sleep(6500);
+				gameTimer.Sleep(6500);
 				world++;
 				gameCtrl.showPassed(world);
 				gameRole = Role(world);
@@ -131,7 +131,7 @@ int main()
 		EndBatchDraw();
 
 		//延迟
-		mytimer.Sleep((int)(TIME * 1000));
+		gameTimer.Sleep((int)(TIME * 1000));
 	}
 
 	mciSendString("close all", NULL, 0, NULL);//关闭所有多媒体音乐文件

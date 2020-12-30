@@ -37,8 +37,8 @@ void Control::showPassed(int world)
 	char s1[20] = "LEVEL:  ";
 	char s2[2];
 	_itoa_s(world, s2, 10);
-	outtextxy(XSIZE / 2 - 20, YSIZE / 2 - 5, s1);
-	outtextxy(XSIZE / 2, YSIZE / 2 - 5, s2);
+	outtextxy(XSIZE / 2 - 30, YSIZE / 2 - 10, s1);
+	outtextxy(XSIZE / 2 + 20, YSIZE / 2 - 10, s2);
 	Sleep(2000);
 }
 
