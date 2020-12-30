@@ -1,6 +1,6 @@
 #pragma once
-#include"graphics.h"
-#include"mydefine.h"
+#include<graphics.h>
+#include"define.h"
 
 const int MAP_NUMBER = 30;	//
 const int COINS_NUMBER = 70; //Ó²±ÒÊýÁ¿

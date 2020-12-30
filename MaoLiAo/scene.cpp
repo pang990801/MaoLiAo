@@ -1,12 +1,12 @@
-#include "scene.h"
-#include"graphics.h"
-#include"math.h"
+#include<graphics.h>
+#include<math.h>
+#include"scene.h"
 #include"role.h"
-#include"mydefine.h"	
+#include"define.h"
 
 scene::scene(int world)
 {
-	loadimage(&img_bg, "res\\mapsky.bmp", XSIZE, 4 * YSIZE );	//加载图片
+	loadimage(&img_bg, "res\\mapsky.bmp", XSIZE, 4 * YSIZE);	//加载图片
 	loadimage(&img_map, "res\\map.bmp");
 	loadimage(&img_scenery, "res\\scenery.bmp");
 	loadimage(&img_coin, "res\\ani.bmp");
@@ -84,7 +84,7 @@ void scene::createMap(int world)	//生成不同的地板 id就是其地板样式
 		{ 101,7,12,1,1 },	//id:12
 		{ 15,10,13,1,1 },{ 64,10,13,1,1 },{ 71,10,13,1,1 },{ 75,10,13,1,1 }	//id:13
 		};*///
-		Map m[] = { 
+		Map m[] = {
 			{ 0,9,1,15,1 },{ 18,8,1,9,1 },{ 27,9,5,37,1 },{ 67,9,6,4,1 },{ 74,9,5,1,1 },{ 78,9,1,28,1 }, //id:1 草砖
 			{ 0,10,3,15,2 },{ 18,9,3,9,3 },{ 27,10,4,37,2 },{ 67,10,3,4,2 },{ 74,10,4,1,2 },{ 78,10,3,28,2 }, //id:3 草砖地下
 		{ 10,6,2,4,1 },{ 40,4,2,3,1 },{ 62,6,2,1,1 },{ 65,4,2,5,1 },	//id:2 云朵//id:3 草地
@@ -94,7 +94,7 @@ void scene::createMap(int world)	//生成不同的地板 id就是其地板样式
 		{ 15,10,13,1,1 },{ 64,10,13,1,1 },{ 71,10,13,1,1 },{ 75,10,13,1,1 }	//id:13 水流 id:14 树
 		};
 		int i = 0;
-		while (m[i].id > 0 && m[i].id < 15 && i < MAP_NUMBER)//(???存在问题)	//不同的地板设置不同的摩擦力
+		while (m[i].id > 0 && m[i].id < 15 && i < MAP_NUMBER)	//不同的地板设置不同的摩擦力
 		{
 			switch (m[i].id)
 			{
@@ -114,7 +114,7 @@ void scene::createMap(int world)	//生成不同的地板 id就是其地板样式
 				m[i].u = (V_MAX / T3) / G;
 				break;
 			}
-			map[i] = m[i];	//此处赋值
+			map[i] = m[i];
 			i++;
 		}
 	}
@@ -170,7 +170,7 @@ void scene::createMap(int world)	//生成不同的地板 id就是其地板样式
 			x[i] = i * 10 + 10; //设置十组横坐标
 		}
 
-		Map m[] = { 
+		Map m[] = {
 			{ x[0],height[0] - 2,8,1,1 },{ x[0],0,7,1,max(0,height[0] - 2) },{ x[0],4 + height[0],10,1,1 },{ x[0],height[0] + 6,7,1, max(0,6 - height[0]) },
 			{ x[1],height[1] - 2,8,1,1 },{ x[1],0,7,1,max(0,height[1] - 2) },{ x[1],4 + height[1],10,1,1 },{ x[1],height[1] + 6,7,1, max(0,6 - height[1]) },
 			{ x[2],height[2] - 2,8,1,1 },{ x[2],0,7,1,max(0,height[2] - 2) },{ x[2],4 + height[2],10,1,1 },{ x[2],height[2] + 6,7,1, max(0,6 - height[2]) },
@@ -185,7 +185,7 @@ void scene::createMap(int world)	//生成不同的地板 id就是其地板样式
 
 
 		};
-		
+
 		int i = 0;
 		while (i <= sizeof(m) / sizeof(m[0]))//???存在问题
 		{
@@ -246,8 +246,8 @@ void scene::createCoin()
 			height[i] = random(3, 7); //设置十组随机高度
 		}
 		//POINT p[] = { { 25,2 },{ 26,2 },{ 27,2 },{ 32,4 },{ 32,5 },{ 32,6 },{ 32,7 },{ 32,8 },{ 50,6 },{ 53,6 },{ 56,6 } };
-		POINT p[] = 
-		{ 
+		POINT p[] =
+		{
 			{5,height[0]},{15,height[1]},{25,height[2]},{35,height[3]},
 			{45,height[4]},{55,height[5]},{65,height[6]}
 		};

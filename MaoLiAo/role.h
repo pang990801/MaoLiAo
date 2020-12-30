@@ -1,6 +1,6 @@
 #pragma once
-#include"graphics.h"
-#include"mydefine.h"
+#include<graphics.h>
+#include"define.h"
 
 const int ENEMY_TOTE = 30;
 const int BOMB_NUMBER = 5;
@@ -56,7 +56,7 @@ struct Map//地图的结构体
 	int yAmount;//纵向地图块的个数
 	double u;//摩擦因数
 };
-#endif
+#endif	
 
 class role
 {
@@ -78,11 +78,11 @@ private:
 	double bullet_iframe[BULLET_NUMBER];	//根据iframe就是选择精灵用第几张图来做主图
 	int score;
 private:
-	Map* touchMap(int x, int y, scene* myScene, int world);//指针做参数后，效率明显提高
-	POINT* touchCoins(int x, int y, scene* myScene);
-	POINT* touchFood(int x, int y, scene* myScene);
-	Enemy* touchEnemy(int x, int y, Enemy* emy);
-	bool isTouch(POINT* p1, POINT* p2);
+	Map* hitMap(int x, int y, scene* myScene, int world);//指针做参数后，效率明显提高
+	POINT* hitCoins(int x, int y, scene* myScene);
+	POINT* hitFood(int x, int y, scene* myScene);
+	Enemy* hitEnemy(int x, int y, Enemy* emy);
+	bool isHit(POINT* p1, POINT* p2);
 	void setBomb(int x, int y);
 	void setBullet(int x, int y);
 	void bullteFlying(Bullet* p, scene* myScene);

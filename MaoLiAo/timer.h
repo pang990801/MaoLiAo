@@ -1,10 +1,11 @@
 #pragma once
 #include <windows.h>
 
+//借鉴别人实现的定时器代码
 //精确到微秒之后的延时类（基于多媒体定时器）
 //以后直接调用myTimer.Sleep(n);
 
-class myTimer
+class CTimer
 {
 private:
 	static LARGE_INTEGER m_clk;			// 保存时钟信息
@@ -15,12 +16,12 @@ public:
 	static void Sleep(int ms);
 };
 
-LARGE_INTEGER myTimer::m_clk;
-LONGLONG myTimer::m_oldclk;
-int myTimer::m_freq = 0;
+LARGE_INTEGER CTimer::m_clk;
+LONGLONG CTimer::m_oldclk;
+int CTimer::m_freq = 0;
 
 // 延时
-void myTimer::Sleep(int ms)
+void CTimer::Sleep(int ms)
 {
 	if (m_oldclk == 0)
 	{

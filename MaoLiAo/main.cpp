@@ -1,9 +1,8 @@
-#include"graphics.h"
-#include"conio.h"
-#include"stdio.h"
-
-#include"MyTimer.h"
-#include"mydefine.h"
+#include<graphics.h>
+#include<conio.h>
+#include<stdio.h>
+#include"timer.h"
+#include"define.h"
 #include"control.h"
 #include"role.h"
 #include"scene.h"
@@ -18,9 +17,9 @@ int main()
 	initgraph(XSIZE, YSIZE);
 
 	HWND hwnd = GetHWnd();	//获取窗口句柄
-	SetWindowText(hwnd, "猫里奥 V1.4 美术重构版");
+	SetWindowText(hwnd, "猫里奥 V2.0");
 
-	control myCtrl;        //定义一个游戏控制
+	CControl myCtrl;        //定义一个游戏控制
 	myCtrl.gameStart();//游戏的开始界面
 
 	role myRole(world);    //定义角色
@@ -33,7 +32,7 @@ int main()
 	mciSendString("open res\\游戏结束.mp3 alias music_end", NULL, 0, NULL);
 	mciSendString("play music_bg repeat", NULL, 0, NULL);
 
-	myTimer mytimer;//精确延迟
+	CTimer mytimer;//精确延迟
 
 	while (1)
 	{
@@ -54,7 +53,7 @@ int main()
 			mciSendString("play music_bg from 0", NULL, 0, NULL);
 		}
 
-		myRole.action(key, &myScene ,world);
+		myRole.action(key, &myScene, world);
 
 		myScene.action(&myRole);
 
@@ -146,6 +145,6 @@ int main()
 {
 	FILE *fp;
 	fp = fopen_s(".\\gameRecord.dat", "r");
-//	fscanf_s(fp, "", );
+	fscanf_s(fp, "", );
 	fclose(fp);
 }*/

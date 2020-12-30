@@ -21,16 +21,16 @@
     <ClInclude Include="role.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="myTimer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="mydefine.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="inertia.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="control.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

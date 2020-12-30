@@ -1,12 +1,10 @@
 #include "inertia.h"
 #include"graphics.h"
-#include"mydefine.h"
+#include"define.h"
 #include"math.h"
 #include"inertia.h"
 #include "role.h"
 #pragma comment(lib,"Winmm.lib")   //windows API 音乐
-
-//
 
 role::role(int world)
 {
@@ -55,7 +53,7 @@ role::role(int world)
 		bullet_iframe[k] = 0;
 	}
 
-	createEnemy(world);
+	createEnemy(world);						//创建小怪
 
 	mciSendString("open res\\死亡1.mp3 alias music_died", NULL, 0, NULL);	//音乐导入
 	mciSendString("open res\\跳.mp3 alias music_jump", NULL, 0, NULL);
@@ -69,10 +67,9 @@ role::role(int world)
 
 role::~role(void)
 {
-
 }
 
-void role::createEnemy(int world)	//与scene中的createFood等一样
+void role::createEnemy(int world)	//与scene中的createFood等一样 {横坐标，纵坐标，初始方向}
 {
 	if (world == 1)
 	{
@@ -126,7 +123,7 @@ void role::setBomb(int x, int y)	//碰到墙体、最大距离、敌人时爆炸 传入xy
 	}
 }
 
-void role::setBullet(int x, int y)
+void role::setBullet(int x, int y)  //子弹是一个与主角同向、同位置的精灵
 {
 	for (int i = 0; i < BULLET_NUMBER; i++)
 	{
@@ -152,9 +149,10 @@ void role::bullteFlying(Bullet* p, scene* myScene)	//子弹	//改良：最大距离
 		p->turn = 0;
 		return;
 	}
-	Enemy* emy = touchEnemy(p->x, p->y, myEnemy);
-	Map* map = touchMap(p->x, p->y, myScene, 1);
+	Enemy* emy = hitEnemy(p->x, p->y, myEnemy);
+	Map* map = hitMap(p->x, p->y, myScene, 1);
 	if (emy != NULL || map != NULL || p->x > MAX_DISTANCE)//如果子弹打到敌人或者墙或者达到最大距离
+	//碰到地图最右边也会爆炸，不能射到更右边去。
 	{
 		if (emy != NULL)
 		{
@@ -194,7 +192,7 @@ void role::bullteFlying(Bullet* p, scene* myScene)	//子弹	//改良：最大距离
 		p->x += LEHGTH_INTERVAL_BULLET * p->turn;	//子弹飞行
 }
 
-bool role::isTouch(POINT* p1, POINT* p2)
+bool role::isHit(POINT* p1, POINT* p2)
 {
 	for (int i = 0; i < 4; i++)//如果主角4个顶点有一个顶点在地图内，则判断为接触到地图
 	{
@@ -206,7 +204,7 @@ bool role::isTouch(POINT* p1, POINT* p2)
 	return false;
 }
 
-Map* role::touchMap(int x, int y, scene* myScene, int world)	//碰撞
+Map* role::hitMap(int x, int y, scene* myScene, int world)	//碰撞
 {
 	//总体思路是判断主角的四个顶点是否至少有一个在地图内，有，则判断为主角碰撞到地图
 	int xmap = (int)myHero.x0;	//图片坐标
@@ -239,21 +237,21 @@ Map* role::touchMap(int x, int y, scene* myScene, int world)	//碰撞
 			m[1].x = myScene->getMap()[i].x * WIDTH + myScene->getMap()[i].xAmount * WIDTH;
 			m[1].y = myScene->getMap()[i].y * HEIGHT + myScene->getMap()[i].yAmount * HEIGHT;
 		}
-		if (isTouch(r, m))//如果两个矩形相交，则碰撞
+		if (isHit(r, m))//如果两个矩形相交，则碰撞
 		{
-			if(world == 3 && myScene->getMap()[i].id != 2 && myHero.isShoot == false)
+			if (world == 3 && myScene->getMap()[i].id != 2 && myHero.isShoot == false)
 			{
 				myHero.died = true; //第三关碰到就死,砖块2除外,吃了无敌金币（星星除外）
 			}
 			return &(myScene->getMap()[i]);
 		}
-			
+
 		i++;
 	}
 	return NULL;
 }
 
-POINT* role::touchCoins(int x, int y, scene* myScene)
+POINT* role::hitCoins(int x, int y, scene* myScene)
 {
 	//与碰撞地形的思路是一样的
 	//总体思路是判断主角的四个顶点是否至少有一个在硬币内，有，则判断为主角碰吃到硬币
@@ -276,14 +274,14 @@ POINT* role::touchCoins(int x, int y, scene* myScene)
 		m[0].y = myScene->getCoins()[i].y * HEIGHT;
 		m[1].x = m[0].x + WIDTH;
 		m[1].y = m[0].y + HEIGHT;
-		if (isTouch(r, m))//如果两个矩形相交，则碰撞
+		if (isHit(r, m))//如果两个矩形相交，则碰撞
 			return &(myScene->getCoins()[i]);
 		i++;
 	}
 	return NULL;
 }
 
-POINT* role::touchFood(int x, int y, scene* myScene)
+POINT* role::hitFood(int x, int y, scene* myScene)
 {
 	//总体思路是判断主角的四个顶点是否至少有一个在食物内，有，则判断为主角碰吃到食物
 	int xmap = (int)myHero.x0;
@@ -305,14 +303,14 @@ POINT* role::touchFood(int x, int y, scene* myScene)
 		m[0].y = myScene->getFood()[i].y;
 		m[1].x = m[0].x + 3 * WIDTH / 2 + 4;
 		m[1].y = m[0].y + 4 * HEIGHT / 5;
-		if (isTouch(r, m))//如果两个矩形相交，则碰撞
+		if (isHit(r, m))//如果两个矩形相交，则碰撞
 			return &(myScene->getFood()[i]);
 		i++;
 	}
 	return NULL;
 }
 
-Enemy* role::touchEnemy(int x, int y, Enemy* emy)
+Enemy* role::hitEnemy(int x, int y, Enemy* emy)
 {
 	//与之前碰撞思路一样
 	//总体思路是判断主角的四个顶点是否至少有一个在地图内，有，则判断为主角碰撞到敌人
@@ -337,7 +335,7 @@ Enemy* role::touchEnemy(int x, int y, Enemy* emy)
 			m[0].y = emy[i].y;
 			m[1].x = m[0].x + WIDTH;
 			m[1].y = m[0].y + HEIGHT;
-			if (isTouch(r, m))//如果两个矩形相交，则碰撞
+			if (isHit(r, m))//如果两个矩形相交，则碰撞
 			{
 				return &emy[i];
 			}
@@ -363,6 +361,7 @@ void role::show()	//可以封装更多函数为了方便
 		myHero.turn = -1;
 	if (myHero.died == true)	//绘制死亡图像
 	{
+		//easyx基于三元光栅法的透明图像生成
 		putimage(myHero.x, myHero.y, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, HEIGHT, SRCAND);
 		putimage(myHero.x, myHero.y, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
 	}
@@ -380,6 +379,7 @@ void role::show()	//可以封装更多函数为了方便
 			putimage(myHero.x, myHero.y, WIDTH, HEIGHT, &img_hero, (hero_iframe - 1) * WIDTH + 3 * WIDTH, 0, SRCPAINT);
 		}
 	}
+
 	//下面代码用于控制敌人的步伐，使敌人给人的感觉更像在走路
 	//改变敌人加载图片的第几帧
 	enemy_iframe += TIME * 5;
@@ -395,6 +395,7 @@ void role::show()	//可以封装更多函数为了方便
 		}
 		i++;
 	}
+
 	//下面代码用于控制爆炸效果
 	for (int j = 0; j < BOMB_NUMBER; j++)
 	{
@@ -414,6 +415,7 @@ void role::show()	//可以封装更多函数为了方便
 			}
 		}
 	}
+
 	//下面代码用于控制子弹的显示
 	for (int k = 0; k < BULLET_NUMBER; k++)
 	{
@@ -442,7 +444,8 @@ void role::action(int KEY, scene* myScene, int world)
 	double a = 0;//主角运动的加速度和摩擦力给予的加速度
 	double a1 = 0;
 	Map* map = NULL;
-	if ((KEY & CMD_UP) && myHero.isFly == false && myHero.ending == false || ((KEY & CMD_UP) && world == 3))//只有当主角没有在空中且主角没过关的时候允许按上升键
+	if ((KEY & CMD_UP) && myHero.isFly == false && myHero.ending == false || ((KEY & CMD_UP) && world == 3))
+		//只有当主角没有在空中且主角没过关的时候允许按上升键||在第三关可以无限跳
 	{
 		mciSendString("play music_jump from 0", NULL, 0, NULL);
 		myHero.isFly = true;//表示主角在空中
@@ -450,21 +453,22 @@ void role::action(int KEY, scene* myScene, int world)
 	}
 	if (myHero.isFly == true)
 	{
-		myHero.yy = myHero.yy - (-inertia::move(myHero.vY, TIME, G) * UNREAL_HEIGHT / REAL_HEIGHT);//move函数返回单位时间（T）内，主角上升或下降的高度
+		myHero.yy = myHero.yy - (-CInertia::move(myHero.vY, TIME, G) * UNREAL_HEIGHT / REAL_HEIGHT);
+		//move函数返回单位时间（T）内，主角上升或下降的高度 加速度位移让第三关手感更好
 		myHero.y = (int)myHero.yy;
-		map = touchMap(myHero.x, myHero.y + 1, myScene, world);
+		map = hitMap(myHero.x, myHero.y + 1, myScene, world);
 		if (map != NULL)
 		{
 			if (myHero.vY > 0)//表示当主角接触地面时
 				myHero.isFly = false;
 			myHero.vY = 0;
-			myHero.y = (myHero.y + HEIGHT / 2) / HEIGHT * HEIGHT;//巧用了“+HEIGHT/2”，表示主角的中心
+			myHero.y = (myHero.y + HEIGHT / 2) / HEIGHT * HEIGHT;//“+HEIGHT/2”，表示主角的中心
 			myHero.yy = myHero.y;
 			myHero.direction.y += 1;
 		}
 		if (myHero.vY > 0)
 		{
-			Enemy* emy = touchEnemy(myHero.x, myHero.y, myEnemy);
+			Enemy* emy = hitEnemy(myHero.x, myHero.y, myEnemy);
 			if (emy != NULL)//如果主角踩到敌人 
 			{
 				mciSendString("play music_tread from 0", NULL, 0, NULL);
@@ -484,7 +488,7 @@ void role::action(int KEY, scene* myScene, int world)
 	}
 	else
 	{
-		map = touchMap(myHero.x, myHero.y + 1, myScene, world);
+		map = hitMap(myHero.x, myHero.y + 1, myScene, world);
 		if (map == NULL)//如果主角没有碰到地图，及在空中
 		{
 			myHero.isFly = true;
@@ -521,7 +525,7 @@ void role::action(int KEY, scene* myScene, int world)
 			a1 = k * G * map->u;//由物理公式：a=mg*u/g得出
 	}
 	double tmp = myHero.vX;
-	double H = inertia::move(myHero.vX, TIME, a + a1) * UNREAL_HEIGHT / REAL_HEIGHT;
+	double H = CInertia::move(myHero.vX, TIME, a + a1) * UNREAL_HEIGHT / REAL_HEIGHT;
 	if (tmp * myHero.vX < 0)
 		myHero.vX = 0;
 	myHero.xx = myHero.xx + H;
@@ -533,7 +537,7 @@ void role::action(int KEY, scene* myScene, int world)
 	}
 	if (myHero.x > XSIZE)	//已经过关
 		myHero.passed = true;
-	if (touchMap(myHero.x, myHero.y, myScene ,1) != NULL)	//碰到边界
+	if (hitMap(myHero.x, myHero.y, myScene, 1) != NULL)	//碰到边界
 	{
 		if (myHero.x > XRIGHT)
 			myHero.x = XRIGHT;
@@ -608,14 +612,14 @@ void role::action(int KEY, scene* myScene, int world)
 				int y1 = myEnemy[i].y;
 				int x2 = (int)myHero.x0 + myEnemy[i].x + myEnemy[i].turn * WIDTH;
 				int y2 = myEnemy[i].y + 1;
-				if (touchMap(x1, y1, myScene, 1) != NULL || touchMap(x2, y2, myScene, 1) == NULL)//如果敌人碰到墙壁或者没有踩在陆地上，则敌人向相反方向运动
+				if (hitMap(x1, y1, myScene, 1) != NULL || hitMap(x2, y2, myScene, 1) == NULL)//如果敌人碰到墙壁或者没有踩在陆地上，则敌人向相反方向运动
 					myEnemy[i].turn *= -1;
 			}
 			i++;
 		}
 	}
 	//以下代码判断主角是否吃到金币，若吃到则把金币的坐标记下
-	POINT* p = touchCoins(myHero.x, myHero.y, myScene);
+	POINT* p = hitCoins(myHero.x, myHero.y, myScene);
 	if (p != NULL)
 	{
 		mciSendString("play music_coin from 0", NULL, 0, NULL);
@@ -625,7 +629,7 @@ void role::action(int KEY, scene* myScene, int world)
 		p->y = 0;
 	}
 	//以下代码判断主角是否吃到食物，若吃到则把食物的坐标记下
-	POINT* q = touchFood(myHero.x, myHero.y, myScene);
+	POINT* q = hitFood(myHero.x, myHero.y, myScene);
 	if (q != NULL)
 	{
 		mciSendString("play music_getWeapon from 0", NULL, 0, NULL);
@@ -635,7 +639,7 @@ void role::action(int KEY, scene* myScene, int world)
 		myHero.isShoot = true;
 	}
 	//以下代码判断主角是否撞到敌人
-	Enemy* emy = touchEnemy(myHero.x, myHero.y, myEnemy);
+	Enemy* emy = hitEnemy(myHero.x, myHero.y, myEnemy);
 	if (emy != NULL && myHero.vY <= 0)//如果主角碰到但不踩到敌人
 	{
 		myHero.died = true;

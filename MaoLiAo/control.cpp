@@ -1,23 +1,57 @@
-#include "control.h"
 #include<graphics.h>
+#include "control.h"
 #include"conio.h"
-#include"mydefine.h"
 #include "stdio.h"
-extern int world;	//声明全局变量
+#include"define.h"
+extern int world;	//声明全局变量关卡 在进入FLAPPY BIRD关卡判定会用到
 
-control::control(void) //构造
+CControl::CControl(void) //构造
 {
 	key = 0;
 	loadimage(&img_bg, "res\\home.bmp", XSIZE, 5 * YSIZE);
 }
-control::~control(void) //析构
+CControl::~CControl(void) //析构
 {}
 
-int control::GetCommand() //键盘中转 返回key
+//声明过场动画
+//游戏结束时的动画
+void CControl::showGameOver()
+{
+	IMAGE img;
+	loadimage(&img, "res\\home.bmp", XSIZE, 5 * YSIZE);
+	putimage(0, -YSIZE, &img);
+	Sleep(6500);
+}
+
+//通过某一关的画面
+void CControl::showPassed(int world)
+{
+	cleardevice();
+	IMAGE img;
+	loadimage(&img, "res\\home.bmp", XSIZE, 5 * YSIZE);
+	putimage(0, -2 * YSIZE, &img);
+	char s1[20] = "LEVEL:  ";
+	char s2[2];
+	_itoa_s(world, s2, 10);
+	outtextxy(XSIZE / 2 - 20, YSIZE / 2 - 5, s1);
+	outtextxy(XSIZE / 2, YSIZE / 2 - 5, s2);
+	Sleep(2000);
+}
+
+//通关所有的动画
+void CControl::showPassedAll()
+{
+	IMAGE img;
+	loadimage(&img, "res\\home.bmp", XSIZE, 5 * YSIZE);
+	putimage(0, -3 * YSIZE, &img);
+	Sleep(7800);
+}
+
+int CControl::GetCommand() //键盘中转 返回key
 {
 	int c = 0;
 
-	//由于接收的信号不知一个，所以需要异步输入
+	//由于接收的信号不只一个，所以需要异步输入
 	//异步输入函数：利用Windows API中的GetAsyncKeyState函数
 
 	if (GetAsyncKeyState('A') & 0x8000)
@@ -34,7 +68,7 @@ int control::GetCommand() //键盘中转 返回key
 		c |= CMD_ESC;
 	return c;
 }
-void control::pauseClick()
+void CControl::pauseClick()
 {
 
 	//绘制UI界面
@@ -45,33 +79,38 @@ void control::pauseClick()
 	setfillcolor(GREEN);
 	fillpolygon(points, 4); //绘制多边形
 	setbkmode(TRANSPARENT); //设置背景模式-透明
+	//设置字体
+	LOGFONT f;
+	gettextstyle(&f);						// 获取当前字体设置
+	f.lfHeight = 48;						// 设置字体高度为 48
+	_tcscpy_s(f.lfFaceName, _T("华纹琥珀"));		// 设置字体为“黑体”(高版本 VC 推荐使用 _tcscpy_s 函数)
+	f.lfQuality = 1000;		// 设置输出效果为抗锯齿  
+	settextstyle(&f);						// 设置字体样式
 
-	//绘制Text
-	settextstyle(15, 0, "华纹琥珀");
 
 	//darwtext Windows自带的矩形文本 可以用outtextxy()代替的 由于可以使用RECT来储存文本矩形的参数 所有用起来更方便一些
 	//RECT：rect这个对象是用来存储成对出现的参数，比如，一个矩形框的左上角坐标、宽度和高度
 	//DT_SINGLELINE :单行显示
 	//DT_CENTER:居中显示
 	//DT_VCENTER : 垂直居中显示
+	//输出文字
 
-	RECT r2 = { XSIZE / 2 - 45,YSIZE / 3,XSIZE / 2 + 45,YSIZE / 3 + 30 };	//回到游戏
+	RECT r2 = { XSIZE / 2 - 45,YSIZE / 3,XSIZE / 2 + 45,YSIZE / 3 + 30 };			//回到游戏
 	rectangle(XSIZE / 2 - 45, YSIZE / 3, XSIZE / 2 + 45, YSIZE / 3 + 30);
 	drawtext("返回游戏", &r2, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
-	RECT r3 = { XSIZE / 2 - 45,YSIZE / 3 + 30,XSIZE / 2 + 45,YSIZE / 3 + 60 };	//重新开始
+	RECT r3 = { XSIZE / 2 - 45,YSIZE / 3 + 30,XSIZE / 2 + 45,YSIZE / 3 + 60 };		//重新开始
 	rectangle(XSIZE / 2 - 45, YSIZE / 3 + 30, XSIZE / 2 + 45, YSIZE / 3 + 60);
 	drawtext("重新开始", &r3, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
-	RECT r4 = { XSIZE / 2 - 45,YSIZE / 3 + 60,XSIZE / 2 + 45,YSIZE / 3 + 90 };	//主菜单
+	RECT r4 = { XSIZE / 2 - 45,YSIZE / 3 + 60,XSIZE / 2 + 45,YSIZE / 3 + 90 };		//主菜单
 	rectangle(XSIZE / 2 - 45, YSIZE / 3 + 60, XSIZE / 2 + 45, YSIZE / 3 + 90);
 	drawtext("退出游戏", &r4, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
-	RECT r5 = { XSIZE / 2 - 45,YSIZE / 3 + 90,XSIZE / 2 + 45,YSIZE / 3 + 120 };	//主菜单
+	RECT r5 = { XSIZE / 2 - 45,YSIZE / 3 + 90,XSIZE / 2 + 45,YSIZE / 3 + 120 };		//存档
 	rectangle(XSIZE / 2 - 45, YSIZE / 3 + 90, XSIZE / 2 + 45, YSIZE / 3 + 120);
 	drawtext("进行存档", &r5, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
-	//结束绘制
 	FlushBatchDraw();
 
 	FlushMouseMsgBuffer();//清空鼠标消息队列，否则会出错 //因为延时的存在，所以需要这样正确处理鼠标消息
@@ -178,7 +217,7 @@ void control::pauseClick()
 	}
 }
 
-int control::getKey() //获取键盘
+int CControl::getKey() //获取键盘
 {
 	if (_kbhit())
 	{
@@ -190,7 +229,7 @@ int control::getKey() //获取键盘
 	}
 	return key;
 }
-void control::gameStart() //进入时的开始界面
+void CControl::gameStart() //进入时的开始界面
 {
 	cleardevice(); //清屏
 	setbkmode(TRANSPARENT); //设置背景模式-透明
@@ -204,7 +243,14 @@ void control::gameStart() //进入时的开始界面
 	setfillcolor(0x666666);
 	fillpolygon(points, 4); //绘制多边形
 	setbkmode(TRANSPARENT); //设置背景模式-透明
-	settextstyle(20, 0, "黑体");
+		//设置字体
+	LOGFONT f;
+	gettextstyle(&f);						// 获取当前字体设置
+	f.lfHeight = 20;						// 设置字体高度为 20
+	_tcscpy_s(f.lfFaceName, _T("黑体"));	// 设置字体为“黑体”(高版本 VC 推荐使用 _tcscpy_s 函数)
+	f.lfQuality = 0;						// 设置输出效果为抗锯齿  
+	settextstyle(&f);						// 设置字体样式
+
 	RECT r2 = { XSIZE / 2 - 45,YSIZE / 3,XSIZE / 2 + 45,YSIZE / 3 + 30 }; rectangle(XSIZE / 2 - 45, YSIZE / 3, XSIZE / 2 + 45, YSIZE / 3 + 30);
 	RECT r3 = { XSIZE / 2 - 45,YSIZE / 3 + 30,XSIZE / 2 + 45,YSIZE / 3 + 60 }; rectangle(XSIZE / 2 - 45, YSIZE / 3 + 30, XSIZE / 2 + 45, YSIZE / 3 + 60);
 	RECT r4 = { XSIZE / 2 - 45,YSIZE / 3 + 60,XSIZE / 2 + 45,YSIZE / 3 + 90 }; rectangle(XSIZE / 2 - 45, YSIZE / 3 + 60, XSIZE / 2 + 45, YSIZE / 3 + 90);
@@ -237,11 +283,15 @@ void control::gameStart() //进入时的开始界面
 			{
 				_INTRODUCTION = true;	//界面2的绘制
 				cleardevice();
-				rectangle(50, 50, 213, 220);
-				outtextxy(52, 52, "游戏介绍：");
-				outtextxy(52, 82, "这是一款横版过关游戏");
-				outtextxy(52, 102, "主角叫猫里奥，共有三关");
-				outtextxy(52, 132, "游戏开发者：PWB");
+				putimage(0, 0, &img_bg);
+				settextstyle(20, 0, _T("黑体"));
+				outtextxy(215, 115, "游戏介绍");
+				settextstyle(16, 0, _T("黑体"));
+				outtextxy(190, 155, "这是一款横版过关");
+				outtextxy(190, 180, "游戏。游戏主角叫");
+				outtextxy(190, 205, "猫里奥，共有三关");
+				outtextxy(190, 230, "第三关为跳跃关卡");
+				outtextxy(190, 255, "游戏开发者：PWB");
 				RECT R1 = { XSIZE - 46,YSIZE - 26,XSIZE - 2,YSIZE - 2 }; rectangle(XSIZE - 46, YSIZE - 26, XSIZE - 2, YSIZE - 2);
 				drawtext("返回", &R1, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 				break;
@@ -250,13 +300,15 @@ void control::gameStart() //进入时的开始界面
 			{
 				_OPERATION = true;	//界面3的绘制
 				cleardevice();
-				rectangle(50, 50, 213, 220);
-				outtextxy(52, 52, "Introduction：");
-				outtextxy(52, 72, "move LEFT：A键");
-				outtextxy(52, 92, "move RIGHT：D键");
-				outtextxy(52, 112, "Fire：J键");
-				outtextxy(52, 132, "Jump：W键/K键");
-				outtextxy(52, 152, "Pause：Esc键");
+				putimage(0, 0, &img_bg);
+				settextstyle(20, 0, _T("黑体"));
+				outtextxy(215, 115, "操作指南");
+				settextstyle(16, 0, _T("黑体"));
+				outtextxy(200, 155, "向左移动：A键");
+				outtextxy(200, 180, "向右移动：D键");
+				outtextxy(200, 205, "开火射击：J键");
+				outtextxy(200, 230, "跳跃：W键/K键");
+				outtextxy(200, 255, "暂停键：Esc键");
 				RECT R2 = { XSIZE - 46,YSIZE - 26,XSIZE - 2,YSIZE - 2 }; rectangle(XSIZE - 46, YSIZE - 26, XSIZE - 2, YSIZE - 2);
 				drawtext("返回", &R2, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 				break;
@@ -288,7 +340,7 @@ void control::gameStart() //进入时的开始界面
 			}
 			else
 				break;
-		case WM_MOUSEMOVE:	//高亮显示
+		case WM_MOUSEMOVE:	//绘制移动鼠标到选项上高亮显示的选项
 			RECT r;
 			if (_INTRODUCTION == 1 || _OPERATION == 1)
 			{
@@ -395,7 +447,9 @@ void control::gameStart() //进入时的开始界面
 		}
 	}
 }
-void control::showScore(int score) //显示分数
+
+//显示分数
+void CControl::showScore(int score)
 {
 	settextstyle(0, 0, "Cooper");
 	char s1[20] = "得分:  ";
@@ -406,18 +460,22 @@ void control::showScore(int score) //显示分数
 	outtextxy(10, 10, s1);  //左边显示
 	setbkmode(OPAQUE);
 }
-void control::showLevel(int level) //显示关卡
+
+//显示关卡
+void CControl::showLevel(int level)
 {
 	settextstyle(0, 0, "Cooper");
 	char s1[20] = "关卡:  ";
 	char s2[2];
-	_itoa_s(level, s2, 10);	//同理
+	_itoa_s(level, s2, 10);
 	strcat_s(s1, s2);
-	setbkmode(TRANSPARENT);	//右边显示
+	setbkmode(TRANSPARENT);
 	outtextxy(XSIZE - 90, 10, s1);
 	setbkmode(OPAQUE);
 }
-void control::showDied(int life) //主角死亡时的动画 告诉生命值
+
+//主角死亡时的动画 告诉生命值
+void CControl::showDied(int life)
 {
 	settextstyle(0, 0, "Goudy Stout");
 	cleardevice();
@@ -444,34 +502,6 @@ void control::showDied(int life) //主角死亡时的动画 告诉生命值
 		putimage(XSIZE / 2 + 5, YSIZE / 2 - 16, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
 		putimage(XSIZE / 2 + 47, YSIZE / 2 - 16, WIDTH, HEIGHT, &img_hero, 2 * WIDTH, 0, SRCPAINT);
 	}
-
-	Sleep(2000);
-
-}
-void control::showGameOver() //游戏结束时的动画
-{
-	IMAGE img;
-	loadimage(&img, "res\\home.bmp", XSIZE, 5 * YSIZE);
-	putimage(0, -YSIZE, &img);
-	Sleep(6500);
-}
-void control::showPassed(int world) //通过某一关的画面
-{
-	cleardevice();
-	IMAGE img;
-	loadimage(&img, "res\\home.bmp", XSIZE, 5 * YSIZE);
-	putimage(0, -2 * YSIZE, &img);
-	char s1[20] = "LEVEL:  ";
-	char s2[2];
-	_itoa_s(world, s2, 10);
-	outtextxy(XSIZE / 2 - 20, YSIZE / 2 - 5, s1);
-	outtextxy(XSIZE / 2, YSIZE / 2 - 5, s2);
 	Sleep(2000);
 }
-void control::showPassedAll() //通关所有的动画
-{
-	IMAGE img;
-	loadimage(&img, "res\\home.bmp", XSIZE, 5 * YSIZE);
-	putimage(0, -3 * YSIZE, &img);
-	Sleep(7800);
-}
+

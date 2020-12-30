@@ -21,8 +21,8 @@
   <ItemGroup>
     <ClInclude Include="scene.h" />
     <ClInclude Include="role.h" />
-    <ClInclude Include="myTimer.h" />
-    <ClInclude Include="mydefine.h" />
+    <ClInclude Include="timer.h" />
+    <ClInclude Include="define.h" />
     <ClInclude Include="inertia.h" />
     <ClInclude Include="control.h" />
   </ItemGroup>
