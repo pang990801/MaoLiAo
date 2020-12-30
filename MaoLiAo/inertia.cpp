@@ -3,16 +3,17 @@
 #include<math.h>
 #include"inertia.h"
 
-CInertia::CInertia(void)
+Inertia::Inertia(void)
 {}
 
-CInertia::~CInertia(void)
+Inertia::~Inertia(void)
 {}
 
-double CInertia::move(double& v, double t, double a)	//计算移动距离
+double Inertia::move(double& v, double t, double a)	//计算移动距离
 {
+	//声明位移量
 	double X = 0;
-	X = v * t + 1.0 / 2.0 * a * pow(t, 2);
+	X = v * t + 1.0 / 2.0 * a * t * t;
 	v = v + a * t;
 	return X;
 }

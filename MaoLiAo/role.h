@@ -11,7 +11,7 @@ const double TIME_INTERVAL_BULLET = 0.2;//数值越大，要求子弹发射的间隔时间越长
 
 const int MAX_DISTANCE = 480; //子弹作用最大距离
 
-class scene;//超前说明
+class Scene;//超前说明
 			//因为map类中包括role类的数据成员，使用这种方式不至于死循环
 			//只适用于用来定义类指针或者类应用 
 			//不能来定义类对象变量或者函数的变量名
@@ -58,11 +58,11 @@ struct Map//地图的结构体
 };
 #endif	
 
-class role
+class Role
 {
 private:
 	Hero myHero;//定义一个主角
-	scene* myScene;
+	Scene* myScene;
 	Enemy myEnemy[ENEMY_TOTE];//定义若干敌人
 	POINT bombs[BOMB_NUMBER];//定义若干爆炸点
 	Bullet bullets[BULLET_NUMBER];//定义若干子弹
@@ -78,22 +78,22 @@ private:
 	double bullet_iframe[BULLET_NUMBER];	//根据iframe就是选择精灵用第几张图来做主图
 	int score;
 private:
-	Map* hitMap(int x, int y, scene* myScene, int world);//指针做参数后，效率明显提高
-	POINT* hitCoins(int x, int y, scene* myScene);
-	POINT* hitFood(int x, int y, scene* myScene);
+	Map* hitMap(int x, int y, Scene* myScene, int world);//指针做参数后，效率明显提高
+	POINT* hitCoins(int x, int y, Scene* myScene);
+	POINT* hitFood(int x, int y, Scene* myScene);
 	Enemy* hitEnemy(int x, int y, Enemy* emy);
 	bool isHit(POINT* p1, POINT* p2);
 	void setBomb(int x, int y);
 	void setBullet(int x, int y);
-	void bullteFlying(Bullet* p, scene* myScene);
+	void bullteFlying(Bullet* p, Scene* myScene);
 public:
-	role(int world);
-	~role(void);
+	Role(int world);
+	~Role(void);
 	Hero* getHero() { return &myHero; }
 	bool isDied() { return myHero.died; }
 	bool isPassed() { return myHero.passed; }
 	void createEnemy(int world);
 	void show();
-	void action(int KEY, scene* myScene, int world);
+	void action(int KEY, Scene* myScene, int world);
 	int getScore() { return score; }
 };

@@ -1,7 +1,7 @@
 #pragma once						//避免include同一头文件多次
 #include<graphics.h>
 
-class CControl						//鼠标 键盘控制类
+class Control						//鼠标 键盘控制类
 {
 private:
 	int key;
@@ -9,8 +9,8 @@ private:
 	int GetCommand();
 	void pauseClick();
 public:
-	CControl(void);
-	~CControl(void);
+	Control(void);
+	~Control(void);
 	int getKey();					//获取键盘
 	void gameStart();				//进入时的开始界面
 	void showScore(int score);		//显示分数

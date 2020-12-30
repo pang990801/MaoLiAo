@@ -5,7 +5,7 @@
 //精确到微秒之后的延时类（基于多媒体定时器）
 //以后直接调用myTimer.Sleep(n);
 
-class CTimer
+class Timer
 {
 private:
 	static LARGE_INTEGER m_clk;			// 保存时钟信息
@@ -16,12 +16,12 @@ public:
 	static void Sleep(int ms);
 };
 
-LARGE_INTEGER CTimer::m_clk;
-LONGLONG CTimer::m_oldclk;
-int CTimer::m_freq = 0;
+LARGE_INTEGER Timer::m_clk;
+LONGLONG Timer::m_oldclk;
+int Timer::m_freq = 0;
 
 // 延时
-void CTimer::Sleep(int ms)
+void Timer::Sleep(int ms)
 {
 	if (m_oldclk == 0)
 	{

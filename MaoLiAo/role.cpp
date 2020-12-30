@@ -6,7 +6,7 @@
 #include "role.h"
 #pragma comment(lib,"Winmm.lib")   //windows API ÒôÀÖ
 
-role::role(int world)
+Role::Role(int world)
 {
 	myHero.x = X0;	//³õÊ¼»¯Ö÷½ÇÊý¾Ý
 	myHero.y = X0;
@@ -33,19 +33,25 @@ role::role(int world)
 	loadimage(&img_enemy, "res\\ani.bmp");
 	loadimage(&img_showBomb, "res\\ani.bmp");
 	loadimage(&img_bullet, "res\\ani.bmp");
-	for (int i = 0; i < ENEMY_TOTE; i++)	//³õÊ¼»¯µÐÈË
+
+	//³õÊ¼»¯µÐÈË
+	for (int i = 0; i < ENEMY_TOTE; i++)
 	{
 		myEnemy[i].x = 0;
 		myEnemy[i].y = 0;
 		myEnemy[i].turn = 0;
 	}
-	for (int j = 0; j < BOMB_NUMBER; j++)	//³õÊ¼»¯×Óµ¯±¬Õ¨
+
+	//³õÊ¼»¯×Óµ¯±¬Õ¨
+	for (int j = 0; j < BOMB_NUMBER; j++)
 	{
 		bombs[j].x = 0;
 		bombs[j].y = 0;
 		bomb_iframe[j] = 0;
 	}
-	for (int k = 0; k < BULLET_NUMBER; k++)	//³õÊ¼»¯×Óµ¯
+
+	//³õÊ¼»¯×Óµ¯
+	for (int k = 0; k < BULLET_NUMBER; k++)
 	{
 		bullets[k].x = 0;
 		bullets[k].y = 0;
@@ -53,9 +59,11 @@ role::role(int world)
 		bullet_iframe[k] = 0;
 	}
 
-	createEnemy(world);						//´´½¨Ð¡¹Ö
+	//´´½¨Ð¡¹Ö
+	createEnemy(world);
 
-	mciSendString("open res\\ËÀÍö1.mp3 alias music_died", NULL, 0, NULL);	//ÒôÀÖµ¼Èë
+	//ÒôÀÖµ¼Èë
+	mciSendString("open res\\ËÀÍö1.mp3 alias music_died", NULL, 0, NULL);
 	mciSendString("open res\\Ìø.mp3 alias music_jump", NULL, 0, NULL);
 	mciSendString("open res\\½ð±Ò.mp3 alias music_coin", NULL, 0, NULL);
 	mciSendString("open res\\²ÈµÐÈË.mp3 alias music_tread", NULL, 0, NULL);
@@ -65,11 +73,11 @@ role::role(int world)
 	mciSendString("open res\\×Óµ¯´òµ½µÐÈË.mp3 alias music_boom2", NULL, 0, NULL);
 }
 
-role::~role(void)
+Role::~Role(void)
 {
 }
 
-void role::createEnemy(int world)	//ÓësceneÖÐµÄcreateFoodµÈÒ»Ñù {ºá×ø±ê£¬×Ý×ø±ê£¬³õÊ¼·½Ïò}
+void Role::createEnemy(int world)	//ÓësceneÖÐµÄcreateFoodµÈÒ»Ñù {ºá×ø±ê£¬×Ý×ø±ê£¬³õÊ¼·½Ïò}
 {
 	if (world == 1)
 	{
@@ -109,7 +117,7 @@ void role::createEnemy(int world)	//ÓësceneÖÐµÄcreateFoodµÈÒ»Ñù {ºá×ø±ê£¬×Ý×ø±ê£
 	}
 }
 
-void role::setBomb(int x, int y)	//Åöµ½Ç½Ìå¡¢×î´ó¾àÀë¡¢µÐÈËÊ±±¬Õ¨ ´«Èëxy
+void Role::setBomb(int x, int y)	//Åöµ½Ç½Ìå¡¢×î´ó¾àÀë¡¢µÐÈËÊ±±¬Õ¨ ´«Èëxy
 {
 	for (int i = 0; i < BOMB_NUMBER; i++)
 	{
@@ -123,7 +131,7 @@ void role::setBomb(int x, int y)	//Åöµ½Ç½Ìå¡¢×î´ó¾àÀë¡¢µÐÈËÊ±±¬Õ¨ ´«Èëxy
 	}
 }
 
-void role::setBullet(int x, int y)  //×Óµ¯ÊÇÒ»¸öÓëÖ÷½ÇÍ¬Ïò¡¢Í¬Î»ÖÃµÄ¾«Áé
+void Role::setBullet(int x, int y)  //×Óµ¯ÊÇÒ»¸öÓëÖ÷½ÇÍ¬Ïò¡¢Í¬Î»ÖÃµÄ¾«Áé
 {
 	for (int i = 0; i < BULLET_NUMBER; i++)
 	{
@@ -138,7 +146,7 @@ void role::setBullet(int x, int y)  //×Óµ¯ÊÇÒ»¸öÓëÖ÷½ÇÍ¬Ïò¡¢Í¬Î»ÖÃµÄ¾«Áé
 	}
 }
 
-void role::bullteFlying(Bullet* p, scene* myScene)	//×Óµ¯	//¸ÄÁ¼£º×î´ó¾àÀë
+void Role::bullteFlying(Bullet* p, Scene* myScene)	//×Óµ¯	//¸ÄÁ¼£º×î´ó¾àÀë
 {
 	if (p->x == 0 && p->y == 0)
 		return;
@@ -192,7 +200,7 @@ void role::bullteFlying(Bullet* p, scene* myScene)	//×Óµ¯	//¸ÄÁ¼£º×î´ó¾àÀë
 		p->x += LEHGTH_INTERVAL_BULLET * p->turn;	//×Óµ¯·ÉÐÐ
 }
 
-bool role::isHit(POINT* p1, POINT* p2)
+bool Role::isHit(POINT* p1, POINT* p2)
 {
 	for (int i = 0; i < 4; i++)//Èç¹ûÖ÷½Ç4¸ö¶¥µãÓÐÒ»¸ö¶¥µãÔÚµØÍ¼ÄÚ£¬ÔòÅÐ¶ÏÎª½Ó´¥µ½µØÍ¼
 	{
@@ -204,7 +212,7 @@ bool role::isHit(POINT* p1, POINT* p2)
 	return false;
 }
 
-Map* role::hitMap(int x, int y, scene* myScene, int world)	//Åö×²
+Map* Role::hitMap(int x, int y, Scene* myScene, int world)	//Åö×²
 {
 	//×ÜÌåË¼Â·ÊÇÅÐ¶ÏÖ÷½ÇµÄËÄ¸ö¶¥µãÊÇ·ñÖÁÉÙÓÐÒ»¸öÔÚµØÍ¼ÄÚ£¬ÓÐ£¬ÔòÅÐ¶ÏÎªÖ÷½ÇÅö×²µ½µØÍ¼
 	int xmap = (int)myHero.x0;	//Í¼Æ¬×ø±ê
@@ -251,7 +259,7 @@ Map* role::hitMap(int x, int y, scene* myScene, int world)	//Åö×²
 	return NULL;
 }
 
-POINT* role::hitCoins(int x, int y, scene* myScene)
+POINT* Role::hitCoins(int x, int y, Scene* myScene)
 {
 	//ÓëÅö×²µØÐÎµÄË¼Â·ÊÇÒ»ÑùµÄ
 	//×ÜÌåË¼Â·ÊÇÅÐ¶ÏÖ÷½ÇµÄËÄ¸ö¶¥µãÊÇ·ñÖÁÉÙÓÐÒ»¸öÔÚÓ²±ÒÄÚ£¬ÓÐ£¬ÔòÅÐ¶ÏÎªÖ÷½ÇÅö³Ôµ½Ó²±Ò
@@ -281,7 +289,7 @@ POINT* role::hitCoins(int x, int y, scene* myScene)
 	return NULL;
 }
 
-POINT* role::hitFood(int x, int y, scene* myScene)
+POINT* Role::hitFood(int x, int y, Scene* myScene)
 {
 	//×ÜÌåË¼Â·ÊÇÅÐ¶ÏÖ÷½ÇµÄËÄ¸ö¶¥µãÊÇ·ñÖÁÉÙÓÐÒ»¸öÔÚÊ³ÎïÄÚ£¬ÓÐ£¬ÔòÅÐ¶ÏÎªÖ÷½ÇÅö³Ôµ½Ê³Îï
 	int xmap = (int)myHero.x0;
@@ -310,7 +318,7 @@ POINT* role::hitFood(int x, int y, scene* myScene)
 	return NULL;
 }
 
-Enemy* role::hitEnemy(int x, int y, Enemy* emy)
+Enemy* Role::hitEnemy(int x, int y, Enemy* emy)
 {
 	//ÓëÖ®Ç°Åö×²Ë¼Â·Ò»Ñù
 	//×ÜÌåË¼Â·ÊÇÅÐ¶ÏÖ÷½ÇµÄËÄ¸ö¶¥µãÊÇ·ñÖÁÉÙÓÐÒ»¸öÔÚµØÍ¼ÄÚ£¬ÓÐ£¬ÔòÅÐ¶ÏÎªÖ÷½ÇÅö×²µ½µÐÈË
@@ -345,7 +353,7 @@ Enemy* role::hitEnemy(int x, int y, Enemy* emy)
 	return NULL;
 }
 
-void role::show()	//¿ÉÒÔ·â×°¸ü¶àº¯ÊýÎªÁË·½±ã
+void Role::show()	//¿ÉÒÔ·â×°¸ü¶àº¯ÊýÎªÁË·½±ã
 {
 	//ÏÂÃæ´úÂëÓÃÓÚ¿ØÖÆÖ÷½ÇµÄ²½·¥£¬Ê¹Ö÷½Ç¸øÈËµÄ¸Ð¾õ¸üÏñÔÚ×ßÂ·
 	//¸Ä±äÖ÷½Ç¼ÓÔØÍ¼Æ¬µÄµÚ¼¸Ö¡
@@ -436,7 +444,7 @@ void role::show()	//¿ÉÒÔ·â×°¸ü¶àº¯ÊýÎªÁË·½±ã
 	}
 }
 
-void role::action(int KEY, scene* myScene, int world)
+void Role::action(int KEY, Scene* myScene, int world)
 {
 	this->myScene = myScene;
 	myHero.direction.x = 0;//=0±íÊ¾Ö÷½Ç²»ÃæÏòÈÎÒâ¸ö·½Ïò
@@ -453,7 +461,7 @@ void role::action(int KEY, scene* myScene, int world)
 	}
 	if (myHero.isFly == true)
 	{
-		myHero.yy = myHero.yy - (-CInertia::move(myHero.vY, TIME, G) * UNREAL_HEIGHT / REAL_HEIGHT);
+		myHero.yy = myHero.yy - (-Inertia::move(myHero.vY, TIME, G) * UNREAL_HEIGHT / REAL_HEIGHT);
 		//moveº¯Êý·µ»Øµ¥Î»Ê±¼ä£¨T£©ÄÚ£¬Ö÷½ÇÉÏÉý»òÏÂ½µµÄ¸ß¶È ¼ÓËÙ¶ÈÎ»ÒÆÈÃµÚÈý¹ØÊÖ¸Ð¸üºÃ
 		myHero.y = (int)myHero.yy;
 		map = hitMap(myHero.x, myHero.y + 1, myScene, world);
@@ -525,7 +533,7 @@ void role::action(int KEY, scene* myScene, int world)
 			a1 = k * G * map->u;//ÓÉÎïÀí¹«Ê½£ºa=mg*u/gµÃ³ö
 	}
 	double tmp = myHero.vX;
-	double H = CInertia::move(myHero.vX, TIME, a + a1) * UNREAL_HEIGHT / REAL_HEIGHT;
+	double H = Inertia::move(myHero.vX, TIME, a + a1) * UNREAL_HEIGHT / REAL_HEIGHT;
 	if (tmp * myHero.vX < 0)
 		myHero.vX = 0;
 	myHero.xx = myHero.xx + H;
@@ -553,6 +561,7 @@ void role::action(int KEY, scene* myScene, int world)
 	if (KEY & CMD_ESC)	//²¢²»ÐèÒª¸Ä±äÊôÐÔ
 	{
 	}
+
 	if (KEY & CMD_SHOOT && myHero.isShoot == true)
 	{
 		//xÎª×Óµ¯µÄºá×ø±ê
@@ -585,6 +594,7 @@ void role::action(int KEY, scene* myScene, int world)
 		shootButtonDown = false;
 		shootTimeInterval = 0.01;
 	}
+
 	//ÅÐ¶Ï³öÖ÷½ÇÊÇ·ñ³¬³ö×óÓÒ½çÏÞ
 	if (myHero.x < XLEFT)
 	{
@@ -599,6 +609,7 @@ void role::action(int KEY, scene* myScene, int world)
 		myHero.x = XRIGHT;
 		myHero.xx = myHero.x;
 	}
+
 	//ÒÔÏÂ³ÌÐò¿ØÖÆµÐÈËµÄÔË¶¯
 	int i = 0;
 	if ((int)(enemy_iframe * 100) % 2 == 0)//¿ØÖÆµÐÈËÔË¶¯µÄË¢ÐÂÆµÂÊ

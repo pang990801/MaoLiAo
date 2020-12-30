@@ -4,7 +4,7 @@
 #include"role.h"
 #include"define.h"
 
-scene::scene(int world)
+Scene::Scene(int world)
 {
 	loadimage(&img_bg, "res\\mapsky.bmp", XSIZE, 4 * YSIZE);	//¼ÓÔØÍ¼Æ¬
 	loadimage(&img_map, "res\\map.bmp");
@@ -48,10 +48,10 @@ scene::scene(int world)
 	createFood();
 	createMap(world);
 }
-scene::~scene(void)
+Scene::~Scene(void)
 {}
 
-bool scene::isEnding(int distance)
+bool Scene::isEnding(int distance)
 {
 	//Ä¿Ç°ËùÔÚ¹Ø¿¨ÊÇ·ñ½áÊø	¸ù¾İËù×ßµÄ³¤¶È¾ö¶¨
 	switch (world)
@@ -72,7 +72,7 @@ bool scene::isEnding(int distance)
 	return false;
 }
 
-void scene::createMap(int world)	//Éú³É²»Í¬µÄµØ°å id¾ÍÊÇÆäµØ°åÑùÊ½
+void Scene::createMap(int world)	//Éú³É²»Í¬µÄµØ°å id¾ÍÊÇÆäµØ°åÑùÊ½
 {
 	if (world == 1)
 	{
@@ -210,11 +210,10 @@ void scene::createMap(int world)	//Éú³É²»Í¬µÄµØ°å id¾ÍÊÇÆäµØ°åÑùÊ½
 		}
 	}
 }
-void scene::createCoin()
+void Scene::createCoin()
 {
 	if (world == 1)
 	{
-		//¸Ä½ø£º×Ô¶¯Ëæ»úÉú³É
 		POINT p[] = { { 10,5 },{ 11,5 },{ 12,5 },{ 13,5 },{ 66,3 },{ 67,3 },{ 68,3 },{ 69,3 },{ 74,5 },{ 74,6 },{ 74,7 },{ 74,8 },
 		{ 82,7 },{ 83,8 },{ 84,7 },{ 85,8 },{ 86,7 },{ 87,8 },{ 88,7 },{ 89,8 }
 		};
@@ -240,6 +239,7 @@ void scene::createCoin()
 	else if (world == 3)
 	{
 
+		//¸Ä½ø£º×Ô¶¯Ëæ»úÉú³É
 		int height[10];
 		for (int i = 0; i < 10; i++)
 		{
@@ -260,12 +260,11 @@ void scene::createCoin()
 		}
 	}
 }
-void scene::createFood()
+void Scene::createFood()
 {
 	if (world == 1)
 	{
 		//Ä¿Ç°Ö»ÓĞ·¢Éä×Óµ¯ ÒòÎªÄ¢¹½ÊıÁ¿ÉÙ ºóĞø¿ÉÒÔ¸Ä½ø ³¤´ó »òÆäËû¹¦ÄÜ
-		//POINT p[] = { { 41 * WIDTH,8 * HEIGHT + HEIGHT / 5 } };
 		POINT p[] = { { 14 * WIDTH ,5 * HEIGHT} };
 		int i = 0;
 		while (i <= sizeof(p) / sizeof(p[0]))
@@ -299,7 +298,7 @@ void scene::createFood()
 	}
 }
 
-void scene::setScorePos(int x, int y) //¼Ç×¡µÃ·ÖÓ²±ÒÎ»ÖÃ ÔÚÏÂÒ»Ö¡»æÖÆÍ¼Æ¬Ê±¾Í¿ÉÒÔÇå¿ÕÁË
+void Scene::setScorePos(int x, int y) //¼Ç×¡µÃ·ÖÓ²±ÒÎ»ÖÃ ÔÚÏÂÒ»Ö¡»æÖÆÍ¼Æ¬Ê±¾Í¿ÉÒÔÇå¿ÕÁË
 {
 	for (int i = 0; i < SCORE_NUMBER; i++)
 	{
@@ -312,7 +311,7 @@ void scene::setScorePos(int x, int y) //¼Ç×¡µÃ·ÖÓ²±ÒÎ»ÖÃ ÔÚÏÂÒ»Ö¡»æÖÆÍ¼Æ¬Ê±¾Í¿ÉÒ
 		}
 	}
 }
-void scene::setFood(int x, int y)	//ÎªºÎ´æÔÚÁ½´¦ÉèÖÃfoodµÄÎ»ÖÃ
+void Scene::setFood(int x, int y)	//ÎªºÎ´æÔÚÁ½´¦ÉèÖÃfoodµÄÎ»ÖÃ
 {
 	for (int i = 0; i < FOOD_NUMBER; i++)
 	{
@@ -325,7 +324,7 @@ void scene::setFood(int x, int y)	//ÎªºÎ´æÔÚÁ½´¦ÉèÖÃfoodµÄÎ»ÖÃ
 	}
 }
 
-void scene::action(role* myRole)	//±³¾°µÄÒÆ¶¯
+void Scene::action(Role* myRole)	//±³¾°µÄÒÆ¶¯
 {
 	//ÓÉÖ÷½ÇµÄ×ø±ê¸Ä±ä±³¾°ºÍµØÍ¼µÄ×ø±ê£¬Ê¹Ö÷½ÇÓĞÏòÇ°ÔË¶¯µÄ¸Ğ¾õ
 	int xmap = xMap;
@@ -338,7 +337,7 @@ void scene::action(role* myRole)	//±³¾°µÄÒÆ¶¯
 		xBg -= bgStep;//±³¾°ÏòºóÒÆ¶¯	//×ø±ê²Î¿¼ÏµµÄÎÊÌâ	//ËùÒÔ´Ë´¦ÊÇ¼õ
 						//Êµ¼ÊÉÏ½ÇÉ«Ò»Ö±ÔÚÒ»¸ö´°¿ÚÀï£¬Èç¹ûĞèÒªÊµÏÖ½ÇÉ«ÏòÇ°ÒÆ¶¯£¬ÄÇÃ´±³¾°Í¼Æ¬¾ÍÒªÏòºóÒÆ¶¯
 }
-void scene::show()
+void Scene::show()
 {
 	//¿ØÖÆ±³¾°ÒÆ¶¯	½²Ö®Ç°ÒÆ¶¯È·¶¨ºÃµÄµã»æÖÆ³öÀ´	//ËùÒÔ´Ë´¦ÊÇĞ¡ÓÚ¸º
 	if (xBg <= -img_bg.getwidth())

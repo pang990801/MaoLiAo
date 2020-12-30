@@ -3,19 +3,23 @@
 #include"conio.h"
 #include "stdio.h"
 #include"define.h"
+
 extern int world;	//声明全局变量关卡 在进入FLAPPY BIRD关卡判定会用到
 
-CControl::CControl(void) //构造
+//构造
+Control::Control(void)
 {
 	key = 0;
 	loadimage(&img_bg, "res\\home.bmp", XSIZE, 5 * YSIZE);
 }
-CControl::~CControl(void) //析构
+//析构
+Control::~Control(void)
 {}
 
 //声明过场动画
+
 //游戏结束时的动画
-void CControl::showGameOver()
+void Control::showGameOver()
 {
 	IMAGE img;
 	loadimage(&img, "res\\home.bmp", XSIZE, 5 * YSIZE);
@@ -24,7 +28,7 @@ void CControl::showGameOver()
 }
 
 //通过某一关的画面
-void CControl::showPassed(int world)
+void Control::showPassed(int world)
 {
 	cleardevice();
 	IMAGE img;
@@ -39,7 +43,7 @@ void CControl::showPassed(int world)
 }
 
 //通关所有的动画
-void CControl::showPassedAll()
+void Control::showPassedAll()
 {
 	IMAGE img;
 	loadimage(&img, "res\\home.bmp", XSIZE, 5 * YSIZE);
@@ -47,7 +51,8 @@ void CControl::showPassedAll()
 	Sleep(7800);
 }
 
-int CControl::GetCommand() //键盘中转 返回key
+//键盘中转 返回key
+int Control::GetCommand()
 {
 	int c = 0;
 
@@ -68,7 +73,9 @@ int CControl::GetCommand() //键盘中转 返回key
 		c |= CMD_ESC;
 	return c;
 }
-void CControl::pauseClick()
+
+//绘制暂停的函数
+void Control::pauseClick()
 {
 
 	//绘制UI界面
@@ -82,8 +89,8 @@ void CControl::pauseClick()
 	//设置字体
 	LOGFONT f;
 	gettextstyle(&f);						// 获取当前字体设置
-	f.lfHeight = 48;						// 设置字体高度为 48
-	_tcscpy_s(f.lfFaceName, _T("华纹琥珀"));		// 设置字体为“黑体”(高版本 VC 推荐使用 _tcscpy_s 函数)
+	f.lfHeight = 18;						// 设置字体高度为 15
+	_tcscpy_s(f.lfFaceName, _T("黑体"));		// 设置字体为“黑体”(高版本 VC 推荐使用 _tcscpy_s 函数)
 	f.lfQuality = 1000;		// 设置输出效果为抗锯齿  
 	settextstyle(&f);						// 设置字体样式
 
@@ -120,9 +127,8 @@ void CControl::pauseClick()
 	{
 		BeginBatchDraw();
 		MOUSEMSG m = GetMouseMsg();
-		switch (m.uMsg)
+		if ((m.uMsg == WM_LBUTTONDOWN))
 		{
-		case WM_LBUTTONDOWN: //点击选中
 			EndBatchDraw();
 			if (m.x > XSIZE / 2 - 45 && m.x<XSIZE / 2 + 45 && m.y>YSIZE / 3 && m.y < YSIZE / 3 + 30)//如果选择“回到游戏”，则返回VIR_RETURN
 			{
@@ -148,8 +154,10 @@ void CControl::pauseClick()
 				key = VIR_RETURN;
 				return;
 			}
+		}
 
-		case WM_MOUSEMOVE: //移动高亮
+		if ((m.uMsg == WM_MOUSEMOVE))
+		{
 			RECT r;
 			int i;
 			for (i = 0; i < 4; i++)	//相当于重新绘制一遍 用不同的颜色突出
@@ -165,6 +173,7 @@ void CControl::pauseClick()
 					setfillcolor(BLUE);
 					fillpolygon(points, 4);
 					setbkmode(TRANSPARENT);
+					settextstyle(18, 0, "黑体");
 					switch (i)
 					{
 					case 0:
@@ -194,6 +203,7 @@ void CControl::pauseClick()
 						setfillcolor(GREEN);
 						fillpolygon(points, 4);
 						setbkmode(TRANSPARENT);
+						settextstyle(18, 0, "黑体");
 						switch (i)
 						{
 						case 0:
@@ -217,7 +227,8 @@ void CControl::pauseClick()
 	}
 }
 
-int CControl::getKey() //获取键盘
+//获取键盘
+int Control::getKey()
 {
 	if (_kbhit())
 	{
@@ -229,7 +240,9 @@ int CControl::getKey() //获取键盘
 	}
 	return key;
 }
-void CControl::gameStart() //进入时的开始界面
+
+//进入时的开始界面
+void Control::gameStart()
 {
 	cleardevice(); //清屏
 	setbkmode(TRANSPARENT); //设置背景模式-透明
@@ -449,7 +462,7 @@ void CControl::gameStart() //进入时的开始界面
 }
 
 //显示分数
-void CControl::showScore(int score)
+void Control::showScore(int score)
 {
 	settextstyle(0, 0, "Cooper");
 	char s1[20] = "得分:  ";
@@ -462,7 +475,7 @@ void CControl::showScore(int score)
 }
 
 //显示关卡
-void CControl::showLevel(int level)
+void Control::showLevel(int level)
 {
 	settextstyle(0, 0, "Cooper");
 	char s1[20] = "关卡:  ";
@@ -475,7 +488,7 @@ void CControl::showLevel(int level)
 }
 
 //主角死亡时的动画 告诉生命值
-void CControl::showDied(int life)
+void Control::showDied(int life)
 {
 	settextstyle(0, 0, "Goudy Stout");
 	cleardevice();

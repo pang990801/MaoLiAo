@@ -3,10 +3,10 @@
 #include"define.h"
 #include"scene.h"
 
-class CInertia											//惯性类
+class Inertia											//惯性类
 {
-	CInertia(void);
-	~CInertia(void);
+	Inertia(void);
+	~Inertia(void);
 public:
 	static double move(double& v, double t, double a);	//惯性系位移计算
 };
