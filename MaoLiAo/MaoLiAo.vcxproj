@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="scene.h" />
     <ClInclude Include="role.h" />
     <ClInclude Include="timer.h" />
@@ -32,6 +33,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="inertia.cpp" />
     <ClCompile Include="control.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MaoLiAo.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="MaoLiAo.ico" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
