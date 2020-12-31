@@ -41,13 +41,13 @@ int main()
 
 	while (true)
 	{
-		int key = gameCtrl.getKey(); //获取玩家按下的键                              
-		if (key == VIR_RESTART)     //如果游戏过程中选择了“重新开始”
+		int key = gameCtrl.getKey();	//获取玩家按下的键                              
+		if (key == VIR_RESTART)			//如果游戏过程中选择了“重新开始”
 		{
 			gameScene = Scene(world); mciSendString("play music_bg from 0", NULL, 0, NULL);
 			gameRole = Role(world);
 		}
-		else if (key == VIR_HOME)   //如果游戏过程中选择了“主菜单”
+		else if (key == VIR_HOME)		//如果游戏过程中选择了“主菜单”
 		{
 			mciSendString("stop music_bg", NULL, 0, NULL);
 			life = LIFE;
